@@ -60,7 +60,10 @@ const allowedOrigins = [
     'http://127.0.0.1:5173',
     'http://127.0.0.1:3000',
     'http://sparkbrightcleaning.com',      // add this
-    'http://www.sparkbrightcleaning.com'   // add www version
+    'http://www.sparkbrightcleaning.com',
+        'https://admin.sparkbrightcleaning.com',
+
+    // add www version
 ];
 
 
