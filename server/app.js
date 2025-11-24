@@ -52,16 +52,17 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev'));
 }
 
-// Update the CORS configuration in app.js
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5174',
     'http://localhost:5175',
-    // Vite default dev server
-    'http://localhost:3000', // Common React dev server
-    'http://127.0.0.1:5173', // Alternative localhost
-    'http://127.0.0.1:3000' // Alternative localhost
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+    'http://sparkbrightcleaning.com',      // add this
+    'http://www.sparkbrightcleaning.com'   // add www version
 ];
+
 
 app.use(
     cors({
