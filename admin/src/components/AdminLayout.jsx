@@ -19,7 +19,7 @@ import {
 import { Container, Navbar, Nav, Offcanvas, Dropdown, Badge } from 'react-bootstrap';
 import { logout } from '../services/auth';
 import api from '../services/api';
-import './AdminLayout.css'; // We'll create this for custom styles
+import './AdminLayout.css'; // Import CSS for AdminLayout styles
 
 const AdminLayout = () => {
   const [showSidebar, setShowSidebar] = useState(false);
