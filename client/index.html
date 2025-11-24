@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Spark Bright Cleaning Services</title>
+
+    <link rel="shortcut icon" href="./src/assets/logo.png" type="image/x-icon" />
+
+    <!-- Preconnect for speed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- PRELOAD all fonts (Poppins + Montserrat FULL weights) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      />
+    </noscript>
+
+    <!-- Preload Vite CSS (non-blocking) -->
+    <link
+      rel="preload"
+      href="/assets/index.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+
+    <noscript>
+      <link rel="stylesheet" href="/assets/index.css" />
+    </noscript>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- React Entry -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

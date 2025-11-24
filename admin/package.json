@@ -1,0 +1,35 @@
+{
+  "name": "cleaning-admin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.19",
+    "@heroicons/react": "^2.2.0",
+    "@popperjs/core": "^2.11.8",
+    "autoprefixer": "^10.4.14",
+    "axios": "^1.13.2",
+    "bootstrap": "^5.3.8",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.251.0",
+    "postcss": "^8.4.27",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.2.0",
+    "react-feather": "^2.0.10",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^6.30.2",
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "vite": "^4.4.5"
+  }
+}

@@ -1,0 +1,49 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Vite cache
+.vite/
+vite.config.timestamp-*
+
+# Editor folders
+.vscode/
+.idea/
+
+# Optional: Rollup visualizer output
+stats.html
+dist/stats.html
+
+# Cache files
+.cache/
+.eslintcache/
+
+# Temp files
+*.temp
+*.tmp
+
+# Output from tools
+coverage/
