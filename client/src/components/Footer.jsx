@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   FaPhone,
@@ -95,7 +94,7 @@ const Footer = () => {
         </div>
 
         {/* Quick Links */}
-        <div className="flex flex-col justify-center text-center md:text-left h-full">
+        <div className="flex flex-col justify-center text-center md:text-left h-full md:ml-4">
           <h3 className="text-white font-semibold mb-4 text-lg relative inline-block tracking-wide">
             Quick Links
             <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
