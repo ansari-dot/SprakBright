@@ -1,5 +1,4 @@
 
-
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch, FaArrowLeft } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -31,36 +30,28 @@ export default function BlogsPage() {
         const postData = res.data?.data || res.data;
         console.log('Single post data:', postData);
         
-        // Resolve image URL for single post
+        // Keep original image URLs, we'll resolve them at render time
         const processedPost = {
           ...postData,
-          image: resolveImageUrl(postData.image || postData.featuredImage),
-          featuredImage: resolveImageUrl(postData.image || postData.featuredImage)
+          image: postData.image || postData.featuredImage,
+          featuredImage: postData.featuredImage || postData.image
         };
-        console.log('Processed post with resolved image:', processedPost);
         
+        console.log('Processed post with original image paths:', processedPost);
         setSinglePost(processedPost);
         setIsSinglePost(true);
       } else {
-        // Handle multiple posts
+        // Handle multiple posts - keep original URLs
         let blogsData = res.data?.data || res.data || [];
         blogsData = Array.isArray(blogsData) ? blogsData : [];
         
-        // Process and log each blog's image URL
-        const processedBlogs = blogsData.map(blog => {
-          const imageUrl = resolveImageUrl(blog.image || blog.featuredImage);
-          console.log(`Processing blog: ${blog.title}`);
-          console.log(`- Original image: ${blog.image || blog.featuredImage}`);
-          console.log(`- Resolved URL: ${imageUrl}`);
-          
-          return {
-            ...blog,
-            image: imageUrl,
-            featuredImage: imageUrl
-          };
-        });
+        const processedBlogs = blogsData.map(blog => ({
+          ...blog,
+          image: blog.image || blog.featuredImage,
+          featuredImage: blog.featuredImage || blog.image
+        }));
         
-        console.log('Processed blogs with resolved images:', processedBlogs);
+        console.log('Processed blogs with original image paths:', processedBlogs);
         setBlogs(processedBlogs);
       }
     } catch (err) {
@@ -124,11 +115,13 @@ export default function BlogsPage() {
           <article className="bg-white rounded-xl shadow-md overflow-hidden">
             <div className="relative h-96">
               <OptimizedImage
-                src={singlePost.featuredImage || singlePost.image}
+                src={resolveImageUrl(singlePost.featuredImage || singlePost.image)}
                 alt={singlePost.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  console.error('Error loading blog post image:', singlePost.featuredImage || singlePost.image);
+                  const originalSrc = singlePost.featuredImage || singlePost.image;
+                  console.error('Error loading blog post image:', originalSrc);
+                  console.log('Resolved URL was:', resolveImageUrl(originalSrc));
                   e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
                 }}
               />
@@ -190,11 +183,13 @@ export default function BlogsPage() {
               >
                 <div className="relative h-60">
                   <OptimizedImage
-                    src={blog.featuredImage || blog.image}
+                    src={resolveImageUrl(blog.featuredImage || blog.image)}
                     alt={blog.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      console.error('Error loading blog list image:', blog.featuredImage || blog.image);
+                      const originalSrc = blog.featuredImage || blog.image;
+                      console.error('Error loading blog list image:', originalSrc);
+                      console.log('Resolved URL was:', resolveImageUrl(originalSrc));
                       e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
                     }}
                   />
