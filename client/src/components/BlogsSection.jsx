@@ -1,4 +1,3 @@
-
 import { FaCalendarAlt, FaArrowRight, FaSpinner } from "react-icons/fa";
 import OptimizedImage from "./OptimizedImage";
 import api, { resolveImageUrl } from "../services/api";
@@ -55,11 +54,30 @@ export default function BlogsSection() {
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching blog posts...');
       const res = await api.get("/blogs/get");
+      
       // Handle both old and new response formats
       const blogs = res.data?.data || res.data || [];
+      console.log('Raw blog data:', blogs);
+      
+      // Process and log each blog's image URL
+      const processedBlogs = blogs.map(blog => {
+        const imageUrl = resolveImageUrl(blog.image || blog.featuredImage);
+        console.log(`Processing blog: ${blog.title}`);
+        console.log(`- Original image: ${blog.image || blog.featuredImage}`);
+        console.log(`- Resolved URL: ${imageUrl}`);
+        
+        return {
+          ...blog,
+          image: imageUrl,
+          featuredImage: imageUrl // Ensure both image properties are set
+        };
+      });
+      
       // Show only the first 3 blog posts
-      const firstThreeBlogs = Array.isArray(blogs) ? blogs.slice(0, 3) : [];
+      const firstThreeBlogs = Array.isArray(processedBlogs) ? processedBlogs.slice(0, 3) : [];
+      console.log('First 3 blogs with resolved images:', firstThreeBlogs);
       setBlogPosts(firstThreeBlogs);
     } catch (err) {
       console.error("Error fetching blogs:", err);
@@ -117,10 +135,14 @@ export default function BlogsSection() {
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-lg">
               <OptimizedImage
-                src={resolveImageUrl(post.image || post.featuredImage)}
+                src={post.image || post.featuredImage}
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
+                onError={(e) => {
+                  console.error('Error loading blog image:', post.image || post.featuredImage);
+                  e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
+                }}
               />
               {/* Category Badge */}
               <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
