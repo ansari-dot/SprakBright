@@ -44,7 +44,7 @@ const Team = lazy(() => import("./pages/team"));
 const Testimonial = lazy(() => import("./pages/testimonial"));
 const Message = lazy(() => import("./pages/Message"));
 const Project = lazy(() => import("./pages/project"));
-const Gallery = lazy(() => import("./pages/Gallery"));
+const Gallery = lazy(() => import("./pages/gallery.jsx"));
 const Blogs =  lazy(()=> import ('./pages/Blogs.jsx'))
 const Quotes =  lazy(()=> import ('./pages/AdminQuotes.jsx'))
 // Protected Route
