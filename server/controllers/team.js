@@ -4,7 +4,7 @@ class TeamController {
     // Add a member (only admin)
     async addMember(req, res) {
         try {
-            const { name, role, type = 'physical', twitter, linkedin, facebook } = req.body;
+            const { name, role, twitter, linkedin, facebook } = req.body;
             console.log("Body:", req.body);
             console.log("File:", req.file);
 
@@ -15,18 +15,11 @@ class TeamController {
                 });
             }
 
-            // Validate member type
-            if (!['digital', 'physical'].includes(type)) {
-                return res.status(400).json({
-                    message: "Invalid member type. Must be 'digital' or 'physical'",
-                    success: false
-                });
-            }
+          
 
             const newMember = await Team.create({
                 name,
                 role,
-                type,
                 image: `/uploads/team/${req.file.filename}`,
                 socialLinks: {
                     twitter: twitter || "",
@@ -73,7 +66,7 @@ class TeamController {
     async updateMember(req, res) {
         try {
             const { id } = req.params;
-            const { name, role, type, twitter, linkedin, facebook } = req.body;
+            const { name, role, twitter, linkedin, facebook } = req.body;
 
             const member = await Team.findById(id);
             if (!member) {
@@ -100,7 +93,6 @@ class TeamController {
             // Update other fields
             member.name = name || member.name;
             member.role = role || member.role;
-            member.type = type || member.type;
             member.socialLinks = {
                 twitter: twitter !== undefined ? twitter : member.socialLinks.twitter,
                 linkedin: linkedin !== undefined ? linkedin : member.socialLinks.linkedin,
