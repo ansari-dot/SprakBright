@@ -1,6 +1,7 @@
+
 import { FaCalendarAlt, FaArrowRight, FaSpinner } from "react-icons/fa";
 import OptimizedImage from "./OptimizedImage";
-import api, { resolveImageUrl } from "../services/api.js";
+import api, { resolveImageUrl } from "../services/api";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -114,11 +115,11 @@ export default function BlogsSection() {
             key={post._id || post.id}
             className="group bg-white/90 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
             {/* Image */}
-            <div className="relative overflow-hidden h-60">
+            <div className="relative h-48 overflow-hidden rounded-t-lg">
               <OptimizedImage
-                src={resolveImageUrl(post.featuredImage || post.image)}
+                src={resolveImageUrl(post.image || post.featuredImage)}
                 alt={post.title}
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
               {/* Category Badge */}
