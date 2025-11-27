@@ -1,4 +1,5 @@
 
+
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch, FaArrowLeft } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -116,8 +117,14 @@ export default function BlogsPage() {
                     alt={blog.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      console.error('Error loading blog image:', blog.image);
-                      e.target.src = '/images/fallback-blog.jpg';
+                      console.error('Blog image loading error:', {
+                        originalSrc: blog.image,
+                        resolvedUrl: resolveImageUrl(blog.image),
+                        blogId: blog._id,
+                        blogTitle: blog.title
+                      });
+                      // Set a fallback image
+                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkJsb2cgSW1hZ2UgVW5hdmFpbGFibGU8L3RleHQ+PC9zdmc+';
                     }}
                   />
                   <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
