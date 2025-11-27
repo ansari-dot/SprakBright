@@ -40,35 +40,43 @@ import.meta !== 'undefined' &&
     import.meta.env.DEV;
 export const resolveImageUrl = (imageUrl) => {
     if (!imageUrl) return '';
+    
+    // Handle array or object inputs
     if (Array.isArray(imageUrl)) {
         imageUrl = imageUrl[0] || '';
     } else if (typeof imageUrl === 'object') {
         imageUrl = imageUrl.url || imageUrl.path || imageUrl.src || imageUrl.filename || imageUrl.image || '';
     }
+    
+    // Convert to string and normalize slashes
     let url = String(imageUrl).trim().replace(/\\/g, '/');
-    if (IS_DEV && url.startsWith('http')) {
-        if (url.startsWith(baseURL)) return url.replace(baseURL, '');
-        if (url.startsWith(ASSET_BASE)) return url.replace(ASSET_BASE, '');
-        return url;
+    
+    // Clean up any double API paths
+    if (url.includes('api/api/')) {
+        url = url.replace('api/api/', 'api/');
     }
-    if (url.startsWith('http')) return url;
-
-    // Normalize to start with '/uploads' or '/api' where possible
-    if (url.startsWith('uploads')) url = `/${url}`;
-
-    // In dev, prefer relative paths so Vite proxy serves from same origin
+    
+    // If URL is already absolute, clean it and return
+    if (url.startsWith('http')) {
+        // Clean up any potential double slashes
+        return url.replace(/([^:]\/)\/+/g, '$1');
+    }
+    
+    // Handle relative paths
     if (IS_DEV) {
+        // In development, use relative paths
         if (url.startsWith('/api/uploads')) return url.replace(/^\/api/, '');
         if (url.startsWith('/api')) return url;
         if (url.startsWith('/uploads')) return url;
         if (url.startsWith('/')) return url;
         return `/uploads/${url}`;
     }
-
-    // Production: return absolute URLs
+    
+    // In production, ensure we don't duplicate the base URL
     if (url.startsWith('/api')) return `${baseURL}${url}`;
     if (url.startsWith('/uploads')) return `${ASSET_BASE}${url}`;
     if (url.startsWith('/')) return `${ASSET_BASE}${url}`;
-    // bare filenames or paths → assume served under /uploads
+    
+    // Default case for bare filenames or paths
     return `${ASSET_BASE}/uploads/${url}`;
 };
