@@ -1,3 +1,4 @@
+
 import { FaCalendarAlt, FaArrowRight, FaSpinner } from "react-icons/fa";
 import OptimizedImage from "./OptimizedImage";
 import api, { resolveImageUrl } from "../services/api";
@@ -126,15 +127,21 @@ export default function BlogsSection() {
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-lg">
               <OptimizedImage
-                src={resolveImageUrl(post.image || post.featuredImage)}
+                src={resolveImageUrl(post.image)}
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
                 onError={(e) => {
                   const originalSrc = post.image || post.featuredImage;
-                  console.error('Error loading blog image:', originalSrc);
-                  console.log('Resolved URL was:', resolveImageUrl(originalSrc));
-                  e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
+                  const resolvedUrl = resolveImageUrl(originalSrc);
+                  console.error('Blog image loading error:', {
+                    originalSrc,
+                    resolvedUrl,
+                    blogId: post._id,
+                    blogTitle: post.title
+                  });
+                  // Set a fallback image
+                  e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkJsb2cgSW1hZ2UgVW5hdmFpbGFibGU8L3RleHQ+PC9zdmc+';
                 }}
               />
               {/* Category Badge */}
