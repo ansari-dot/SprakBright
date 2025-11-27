@@ -73,6 +73,9 @@ export const resolveImageUrl = (imageUrl) => {
     }
 
     // Production: return absolute URLs
+    if (url.startsWith('/api/uploads')) { // Handle /api/uploads specifically
+        return `${ASSET_BASE}${url.replace('/api', '')}`; // Use ASSET_BASE and remove the extra /api
+    }
     if (url.startsWith('/api')) return `${baseURL}${url}`;
     if (url.startsWith('/uploads')) return `${ASSET_BASE}${url}`;
     if (url.startsWith('/')) return `${ASSET_BASE}${url}`;
