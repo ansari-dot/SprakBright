@@ -57,10 +57,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const allowedOrigins = [
-    //  'https://admin.sparkbrightcleaning.com',
-    // 'https://sparkbrightcleaning.com',
-    'http://localhost:5173', // optional for dev
-    'http://localhost:5174'
+    'https://admin.sparkbrightcleaning.com',
+    'https://sparkbrightcleaning.com',
+    'http://localhost:5173',  // optional for dev
+    'http://localhost:3000',
+    'http://localhost:5000'
 ];
 app.use(
     cors({
