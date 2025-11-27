@@ -57,7 +57,7 @@ const AboutUsSection = () => {
         </div>
 
         {/* RIGHT SIDE — TEXT CONTENT */}
-        <div className="max-w-2xl text-center lg:text-left">
+        <div className="max-w-2xl text-left lg:text-left">
           <span className="text-sm font-semibold text-[#0098da] uppercase tracking-wider mb-2 inline-block">
             About Us
           </span>
