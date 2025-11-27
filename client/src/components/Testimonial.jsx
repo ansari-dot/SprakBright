@@ -12,7 +12,13 @@ const Testimonial = () => {
   const fetchTestimonials = async () => {
     try {
       const res = await api.get('/testimonial/get');
-      setTestimonials(res.data);
+      console.log('Fetched testimonials:', res.data);
+      // Ensure all image paths are properly resolved
+      const testimonialsWithResolvedImages = res.data.map(testimonial => ({
+        ...testimonial,
+        image: resolveImageUrl(testimonial.image)
+      }));
+      setTestimonials(testimonialsWithResolvedImages);
     } catch (error) {
       console.error("Error fetching testimonials:", error);
       setTestimonials([]);
@@ -73,12 +79,16 @@ const Testimonial = () => {
         {/* Profile image */}
         <div className="w-40 h-40 rounded-full border-4 border-[#e6f5fd] overflow-hidden mb-6 mx-auto">
           <OptimizedImage
-            src={resolveImageUrl(image)}
+            src={image}
             alt={name || "Testimonial author"}
             className="w-full h-full object-cover"
             loading="lazy"
+            onError={(e) => {
+              console.error('Error loading testimonial image:', image);
+              e.target.src = '/path/to/default-avatar.png'; // Add a default avatar image
+            }}
           />
-        </div> {/* ✅ Close the div properly */}
+        </div> 
 
         {/* Testimonial text */}
         <p className="text-gray-700 max-w-xl mx-auto mb-6 italic text-lg font-poppins">
@@ -119,3 +129,4 @@ const Testimonial = () => {
 };
 
 export default Testimonial;
+
