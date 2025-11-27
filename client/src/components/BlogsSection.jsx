@@ -61,23 +61,16 @@ export default function BlogsSection() {
       const blogs = res.data?.data || res.data || [];
       console.log('Raw blog data:', blogs);
       
-      // Process and log each blog's image URL
-      const processedBlogs = blogs.map(blog => {
-        const imageUrl = resolveImageUrl(blog.image || blog.featuredImage);
-        console.log(`Processing blog: ${blog.title}`);
-        console.log(`- Original image: ${blog.image || blog.featuredImage}`);
-        console.log(`- Resolved URL: ${imageUrl}`);
-        
-        return {
-          ...blog,
-          image: imageUrl,
-          featuredImage: imageUrl // Ensure both image properties are set
-        };
-      });
+      // Keep original image URLs, we'll resolve them at render time
+      const processedBlogs = blogs.map(blog => ({
+        ...blog,
+        image: blog.image || blog.featuredImage,
+        featuredImage: blog.featuredImage || blog.image
+      }));
       
       // Show only the first 3 blog posts
       const firstThreeBlogs = Array.isArray(processedBlogs) ? processedBlogs.slice(0, 3) : [];
-      console.log('First 3 blogs with resolved images:', firstThreeBlogs);
+      console.log('First 3 blogs with original image paths:', firstThreeBlogs);
       setBlogPosts(firstThreeBlogs);
     } catch (err) {
       console.error("Error fetching blogs:", err);
@@ -135,12 +128,14 @@ export default function BlogsSection() {
             {/* Image */}
             <div className="relative h-48 overflow-hidden rounded-t-lg">
               <OptimizedImage
-                src={post.image || post.featuredImage}
+                src={resolveImageUrl(post.image || post.featuredImage)}
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
                 onError={(e) => {
-                  console.error('Error loading blog image:', post.image || post.featuredImage);
+                  const originalSrc = post.image || post.featuredImage;
+                  console.error('Error loading blog image:', originalSrc);
+                  console.log('Resolved URL was:', resolveImageUrl(originalSrc));
                   e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
                 }}
               />
