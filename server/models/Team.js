@@ -3,12 +3,7 @@ import mongoose from "mongoose";
 const teamSchema = new mongoose.Schema({
     name: { type: String, required: true },
     role: { type: String, required: true },
-    type: { 
-        type: String, 
-        required: true,
-        enum: ['digital', 'physical'],
-        default: 'physical'
-    },
+  
     image: { type: String, required: true },
     socialLinks: {
         twitter: { type: String, default: "" },
