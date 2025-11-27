@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,7 +6,7 @@ import { setProjects, setSelectedProject } from '../features/projects/projectSli
 import { FiArrowLeft, FiMapPin, FiCalendar, FiLayers, FiCheckCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
-import api from '../services/api';
+import api, { resolveImageUrl } from '../services/api';
 
 const defaultProject = {
   title: 'Project Details',
@@ -121,7 +122,7 @@ const ProjectDetail = () => {
         {/* Hero Section */}
         <div className="relative h-96 overflow-hidden">
           <img
-            src={safeProject.image}
+            src={resolveImageUrl(safeProject.image)}
             alt={safeProject.title}
             className="w-full h-full object-cover"
             loading="lazy"
@@ -157,7 +158,7 @@ const ProjectDetail = () => {
                 {details.gallery.map((img, idx) => (
                   <div key={idx} className="aspect-square overflow-hidden rounded-lg">
                     <img
-                      src={img.startsWith('/uploads') ? img : `/uploads/${img}`}
+                      src={resolveImageUrl(img)}
                       className="w-full h-full object-cover hover:scale-105 transition-transform"
                     />
                   </div>
