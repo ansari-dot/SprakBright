@@ -25,7 +25,7 @@ class blogsController {
                 date,
                 link,
                 category,
-                image: `/api/uploads/blogs/${req.file.filename}`,
+                image: `/uploads/blogs/${req.file.filename}`,
             });
 
             await newBlogs.save();
@@ -37,6 +37,30 @@ class blogsController {
             console.log("Server Error:", err);
             res.status(500).json({
                 message: `Internal Server Error: ${err.message}`,
+            });
+        }
+    }
+
+    // UPDATE BLOG IMAGE PATHS (REMOVE /api PREFIX)
+    async updateBlogImagePaths(req, res) {
+        try {
+            const blogs = await Blogs.find({});
+            
+            for (const blog of blogs) {
+                if (blog.image && blog.image.startsWith('/api/uploads/blogs/')) {
+                    blog.image = blog.image.replace('/api/uploads/blogs/', '/uploads/blogs/');
+                    await blog.save();
+                }
+            }
+            
+            res.status(200).json({
+                message: "Blog image paths updated successfully",
+                updatedCount: blogs.length
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Error updating blog image paths",
+                error: error.message
             });
         }
     }
