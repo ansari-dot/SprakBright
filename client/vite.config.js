@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => {
     const url = env.VITE_BACKEND_URL;
 
     return {
+        base: './', // Ensure relative paths for assets
         plugins: [react()],
         css: {
             postcss: {
