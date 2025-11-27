@@ -7,7 +7,7 @@ import {
   Users, 
   Settings, 
   LogOut, 
-  Menu, 
+  Menu,  
   Calendar, 
   FileText, 
   MessageSquare, 
@@ -19,7 +19,7 @@ import {
 import { Container, Navbar, Nav, Offcanvas, Dropdown, Badge } from 'react-bootstrap';
 import { logout } from '../services/auth';
 import api from '../services/api';
-import './AdminLayout.css'; // Import CSS for AdminLayout styles
+import './AdminLayout.css'; // We'll create this for custom styles
 
 const AdminLayout = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -36,6 +36,7 @@ const AdminLayout = () => {
   { name: 'Team', icon: Users, href: '/admin/team' },
   { name: 'Messages', icon: MessageSquare, href: '/admin/messages' },
    { name: 'Blogs', icon: BookCopyIcon, href: '/admin/blogs' },
+  { name: 'Quotes', icon: FileText, href: '/admin/quotes' },
 ];
 
 

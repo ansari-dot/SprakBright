@@ -5,6 +5,7 @@ import { setProjects, setSelectedProject } from '../features/projects/projectSli
 import { FiArrowLeft, FiMapPin, FiCalendar, FiLayers, FiCheckCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
+import api from '../services/api';
 
 const defaultProject = {
   title: 'Project Details',
@@ -37,12 +38,8 @@ const ProjectDetail = () => {
       if (projects.length > 0) return;
 
       try {
-        const res = await fetch('/project/get');
-        if (!res.ok) {
-          console.error(`HTTP error loading all projects: ${res.status} ${res.statusText}`);
-          return;
-        }
-        const data = await res.json();
+        const res = await api.get('/project/get');
+        const data = res.data;
         dispatch(setProjects(data));
       } catch (err) {
         console.error("Error loading project list:", err);
@@ -67,12 +64,8 @@ const ProjectDetail = () => {
       }
 
       try {
-        const res = await fetch(`/project/get/${id}`);
-        if (!res.ok) {
-          console.error(`HTTP error fetching single project: ${res.status} ${res.statusText}`);
-          return;
-        }
-        const data = await res.json();
+        const res = await api.get(`/project/get/${id}`);
+        const data = res.data;
       console.log("Fetched project from API:", data);
         dispatch(setSelectedProject(data));
       } catch (err) {
@@ -156,7 +149,7 @@ const ProjectDetail = () => {
           {/* Overview */}
           <div className="lg:col-span-2">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">Project Overview</h2>
-            <p className="text-gray-600 mb-8 text-lg">{details?.description}</p>
+            <p className="text-gray-600 mb-8 text-lg">{safeProject.description || details.description}</p>
 
             {/* Gallery */}
             {details?.gallery?.length > 0 ? (

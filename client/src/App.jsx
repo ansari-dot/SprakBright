@@ -10,6 +10,9 @@ const Services = lazy(() => import('./pages/Services'));
 const Project = lazy(() => import('./pages/Project'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
+const BlogsPage = lazy(() => import('./pages/BlogsPage'));
+const Quote = lazy(() => import('./pages/Quote'));
+
 
 // Lazy load layout
 const Navbar = lazy(() => import('./components/Navbar'));
@@ -28,7 +31,9 @@ const AnimatedRoutes = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/projects" element={<Project />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+<Route path="/blog" element={<BlogsPage />} />
           <Route path="/contactus" element={<Contact />} />
+          <Route path="/quote" element={<Quote />} />
         </Routes>
       </Suspense>
     </AnimatePresence>

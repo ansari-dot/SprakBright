@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import logo from '../assets/logo.webp';
 import TopContactBar from './TopContactBar';
 import OptimizedImage from './OptimizedImage';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +50,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <ul className="md:flex hidden items-center gap-10 flex-1 justify-center">
-          {['Home', 'About Us', 'Services', 'Projects', 'Contact Us'].map((item, idx) => (
+          {['Home', 'About Us', 'Services', 'Projects', 'Blog', 'Contact Us'].map((item, idx) => (
             <li key={idx}>
               <Link
                 className="hover:text-[#0098da] transition-colors duration-300"
@@ -66,7 +68,8 @@ const Navbar = () => {
           <button
             type="button"
             className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white md:inline hidden text-sm hover:opacity-90 active:scale-95 transition-all w-40 h-11 rounded-full shadow-md"
-          >
+            onClick={() => navigate('/quote')}
+       >
             Get Quote
           </button>
 
@@ -96,7 +99,7 @@ const Navbar = () => {
           }`}
         >
           <ul className="flex flex-col space-y-4 text-lg">
-            {['Home', 'About Us', 'Services', 'Projects', 'Contact Us'].map((item, idx) => (
+            {['Home', 'About Us', 'Services', 'Projects', 'Blog', 'Contact Us'].map((item, idx) => (
               <li key={idx}>
                 <Link
                   className="text-sm block py-2"

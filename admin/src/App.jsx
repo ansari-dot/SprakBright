@@ -44,8 +44,9 @@ const Team = lazy(() => import("./pages/team"));
 const Testimonial = lazy(() => import("./pages/testimonial"));
 const Message = lazy(() => import("./pages/Message"));
 const Project = lazy(() => import("./pages/project"));
-const Gallery = lazy(() => import("./pages/gallery"));
+const Gallery = lazy(() => import("./pages/Gallery"));
 const Blogs =  lazy(()=> import ('./pages/Blogs.jsx'))
+const Quotes =  lazy(()=> import ('./pages/AdminQuotes.jsx'))
 // Protected Route
 const ProtectedRoute = ({ children }) => {
   const [isAuth, setIsAuth] = useState(null);
@@ -115,6 +116,7 @@ const App = () => {
             <Route path="projects" element={<Project />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path =  "blogs" element = {<Blogs />} />
+            <Route path =  "quotes" element = {<Quotes />} />
           </Route>
 
           <Route

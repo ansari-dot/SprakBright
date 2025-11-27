@@ -15,6 +15,7 @@ export default function ProjectSection() {
       setLoading(true);
      // const data = await axios.get(`${url}/project/four/get`)
       const res =  await api.get('/project/four/get')
+        console.log(res.data);
       setProjects(res.data);
     } catch (err) {
       console.error("Error fetching projects:", err);

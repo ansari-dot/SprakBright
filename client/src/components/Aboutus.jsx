@@ -3,8 +3,9 @@ import mainImage from "../assets/herosection/Banner1.webp";
 import smallImage from "../assets/herosection/Banner2.webp";
 import bc from "../assets/bc.webp";
 import OptimizedImage from "../components/OptimizedImage";
-
+import { useNavigate } from "react-router-dom";
 const AboutUsSection = () => {
+  const navigate =  useNavigate();
   return (
     <section className="relative py-20 overflow-hidden">
       {/* Background Image (CLS FIXED with width/height) */}
@@ -147,7 +148,7 @@ const AboutUsSection = () => {
 
           {/* CTA BUTTONS */}
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="bg-gradient-to-r from-[#0098da] to-[#0683ba] hover:from-[#0683ba] hover:to-[#0098da] text-white px-8 py-3 rounded-full font-medium text-lg font-poppins transition-all duration-300 transform hover:scale-105 shadow-lg">
+            <button className="bg-gradient-to-r from-[#0098da] to-[#0683ba] hover:from-[#0683ba] hover:to-[#0098da] text-white px-8 py-3 rounded-full font-medium text-lg font-poppins transition-all duration-300 transform hover:scale-105 shadow-lg" onClick={()=>navigate('/aboutus')}>
               Learn More
             </button>
 

@@ -1,7 +1,10 @@
-import { FaCalendarAlt, FaArrowRight } from "react-icons/fa";
+import { FaCalendarAlt, FaArrowRight, FaSpinner } from "react-icons/fa";
 import OptimizedImage from "./OptimizedImage";
-
-const blogPosts = [
+import api, { resolveImageUrl } from "../services/api.js";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
+/*const blogPosts = [
   {
     id: 1,
     category: "Home Cleaning",
@@ -35,9 +38,63 @@ const blogPosts = [
     image:
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80",
   },
-];
+]; */
 
 export default function BlogsSection() {
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
+  const fetchAll = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await api.get("/blogs/get");
+      // Handle both old and new response formats
+      const blogs = res.data?.data || res.data || [];
+      // Show only the first 3 blog posts
+      const firstThreeBlogs = Array.isArray(blogs) ? blogs.slice(0, 3) : [];
+      setBlogPosts(firstThreeBlogs);
+    } catch (err) {
+      console.error("Error fetching blogs:", err);
+      setError("Failed to load blogs. Please try again later.");
+      toast.error("Failed to load blogs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <FaSpinner className="animate-spin text-4xl text-[#0098da]" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-500">{error}</p>
+        <button 
+          onClick={fetchAll}
+          className="mt-4 px-6 py-2 bg-[#0098da] text-white rounded-md hover:bg-[#0683ba] transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden max-w-7xl mx-auto px-6 md:px-0">
       <div className="text-center mb-16">
@@ -52,15 +109,14 @@ export default function BlogsSection() {
 
       {/* Blog grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {blogPosts.map((post) => (
+        {blogPosts.length > 0 ? blogPosts.map((post) => (
           <article
-            key={post.id}
-            className="group bg-white/90 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full"
-          >
+            key={post._id || post.id}
+            className="group bg-white/90 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
             {/* Image */}
             <div className="relative overflow-hidden h-60">
               <OptimizedImage
-                src={post.image}
+                src={resolveImageUrl(post.featuredImage || post.image)}
                 alt={post.title}
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                 loading="lazy"
@@ -76,26 +132,33 @@ export default function BlogsSection() {
               <div className="flex items-center text-gray-500 text-sm mb-4">
                 <div className="flex items-center mr-4">
                   <FaCalendarAlt className="mr-1 text-[#0098da]" />
-                  <span>{post.date}</span>
+                  <span>{formatDate(post.createdAt || post.publishedAt || post.date)}</span>
                 </div>
                 <span>•</span>
-                <span className="ml-2">{post.readTime}</span>
+                <span className="ml-2">{post.readTime || '5 min read'}</span>
               </div>
 
               <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-[#0098da] transition-colors">
                 {post.title}
               </h3>
-              <p className="text-gray-600 mb-6 flex-grow">{post.snippet}</p>
+              <p className="text-gray-600 mb-6 flex-grow">{post.excerpt || post.snippet || post.content?.substring(0, 150) + '...'}</p>
 
               <div className="mt-auto">
-                <button className="inline-flex items-center text-[#0098da] font-medium group-hover:text-[#0683ba] transition-colors">
+                <Link
+                  to={`/blog/${post.slug || post._id}`}
+                  className="inline-flex items-center text-[#0098da] font-medium group-hover:text-[#0683ba] transition-colors"
+                >
                   Read More
                   <FaArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
-                </button>
+                </Link>
               </div>
             </div>
           </article>
-        ))}
+        )) : (
+          <div className="col-span-full text-center py-10">
+            <p className="text-gray-500">No blog posts found.</p>
+          </div>
+        )}
       </div>
 
       <div className="text-center">

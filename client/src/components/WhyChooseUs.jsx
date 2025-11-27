@@ -1,11 +1,12 @@
 import React from "react";
+import { use } from "react";
 import { 
   FaBriefcase, 
   FaDollarSign, 
   FaLock, 
   FaProjectDiagram 
 } from "react-icons/fa";
-
+import { Navigate, useNavigate } from "react-router-dom";
 const WhyChooseUs = () => {
   const features = [
     {
@@ -33,6 +34,7 @@ const WhyChooseUs = () => {
       description: "Commodo is enim sfr alis suspendissei tortor cum diam commodo facilisis are rutrum etcr duis nisl."
     }
   ];
+   const navgiate =  useNavigate()
 
   return (
     <section className="py-16 bg-white relative overflow-hidden">
@@ -71,7 +73,7 @@ const WhyChooseUs = () => {
 
         {/* CTA Button */}
         <div className="mt-16 flex justify-center">
-          <button className="bg-gradient-to-r from-[#0098da] to-[#0683ba] hover:from-[#0683ba] hover:to-[#0098da] text-white font-medium py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg font-poppins">
+          <button className="bg-gradient-to-r from-[#0098da] to-[#0683ba] hover:from-[#0683ba] hover:to-[#0098da] text-white font-medium py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg font-poppins" onClick={()=>navgiate('/quote')}>
             GET A QUOTE
           </button>
         </div>

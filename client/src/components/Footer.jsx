@@ -98,16 +98,28 @@ const Footer = () => {
             <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
           </h3>
 
-          <ul className="space-y-2 mt-4">
-            {["Home","About Us","Our Services","Pricing Plans","Our Team","Testimonials","Blog","Contact Us"].map((item,index)=>(
-              <li key={index}>
-                <a href="#" className="flex items-center text-gray-100 hover:text-black transition-colors group">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#0098da] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                  <span>{item}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+         <ul className="space-y-2 mt-4">
+  {[
+    { name: "Home", link: "/" },
+    { name: "About Us", link: "/aboutus" },
+    { name: "Our Services", link: "/services" },
+    { name: "Get Quote", link: "/quote" },
+    { name: "Our Team", link: "/aboutus" },
+    { name: "Blog", link: "/blog" },
+    { name: "Contact Us", link: "/contactus" },
+  ].map((item, index) => (
+    <li key={index}>
+      <a
+        href={item.link}
+        className="flex items-center text-gray-100 hover:text-black transition-colors group"
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-[#0098da] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+        <span>{item.name}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
         </div>
 
         {/* Our Services */}
@@ -118,7 +130,7 @@ const Footer = () => {
           </h3>
 
           <ul className="space-y-2 mt-4">
-            {["Residential Cleaning","Commercial Cleaning","Deep Cleaning","Move In/Out Cleaning","Carpet Cleaning","Window Cleaning","Office Cleaning","Post-Construction"].map((service,index)=>(
+            {["Residential Cleaning","Commercial Cleaning","Move In/Out Cleaning","Carpet Cleaning","Office Cleaning",].map((service,index)=>(
               <li key={index}>
                 <a href="#" className="flex items-center text-gray-100 hover:text-black transition-colors group">
                   <span className="w-6 h-6 flex items-center justify-center bg-blue-50 text-[#0098da] rounded-full mr-3 text-sm group-hover:bg-blue-100"></span>

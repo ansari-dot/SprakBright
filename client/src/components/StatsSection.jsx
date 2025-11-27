@@ -27,9 +27,9 @@ const StatsSection = () => {
   }, []);
 
   const stats = [
-    { id: 1, number: 500, suffix: "+", label: "HAPPY CUSTOMERS" },
-    { id: 2, number: 550, suffix: "+", label: "TOTAL PROJECT" },
-    { id: 3, number: 120, suffix: "+", label: "CLEANING STAFF" },
+    { id: 1, number: 100, suffix: "+", label: "HAPPY CUSTOMERS" },
+    { id: 2, number: 150, suffix: "+", label: "TOTAL PROJECT" },
+    { id: 3, number: 60, suffix: "+", label: "CLEANING STAFF" },
     { id: 4, number: 100, suffix: "%", label: "SERVICE GUARANTEE" }
   ];
 

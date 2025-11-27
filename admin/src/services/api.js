@@ -32,7 +32,7 @@ api.interceptors.response.use(
 );
 
 export default api;
-export const ASSET_BASE = (baseURL || '').replace(/\/?api$/, '');
+export const ASSET_BASE = (baseURL || '').replace(/\/?api$/, '') || 'http://localhost:5000';
 const IS_DEV = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
 export const resolveImageUrl = (imageUrl) => {
   if (!imageUrl) return '';

@@ -20,6 +20,7 @@ import galleryRoutes from './routes/gallery.routes.js'
 import projectRoutes from './routes/project.routes.js'
 import dashboardRoutes from './routes/dashboard.routes.js'
 import blogsRoutes from './routes/blogs.routes.js'
+import quoteRoutes from './routes/quote.routes.js'
 dotenv.config();
 
 const app = express();
@@ -28,6 +29,9 @@ const app = express();
 app.use(
     helmet({
         contentSecurityPolicy: false, // disables CSP entirely
+        crossOriginEmbedderPolicy: false, // Allow cross-origin embedding
+        crossOriginOpenerPolicy: false, // Allow cross-origin opener
+        crossOriginResourcePolicy: { policy: "cross-origin" } // Allow cross-origin resources
     })
 );
 // Compression middleware (optimized)
@@ -52,17 +56,12 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev'));
 }
 
-// Update the CORS configuration in app.js
 const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    // Vite default dev server
-    'http://localhost:3000', // Common React dev server
-    'http://127.0.0.1:5173', // Alternative localhost
-    'http://127.0.0.1:3000' // Alternative localhost
+    //  'https://admin.sparkbrightcleaning.com',
+    // 'https://sparkbrightcleaning.com',
+    'http://localhost:5173', // optional for dev
+    'http://localhost:5174'
 ];
-
 app.use(
     cors({
         origin: function(origin, callback) {
@@ -78,17 +77,39 @@ app.use(
         },
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization']
+        allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept']
     })
 );
-
 // Path helpers
 const __filename = fileURLToPath(
     import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded files with proper CORS headers
+app.use('/uploads', (req, res, next) => {
+    // Set CORS headers for static files
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
+    res.header('Timing-Allow-Origin', '*');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+
+    next();
+}, express.static(path.join(__dirname, 'uploads'), {
+    setHeaders: (res, path) => {
+        // Additional headers for images
+        if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
+            res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+            res.set('Timing-Allow-Origin', '*');
+        }
+    }
+}));
 
 // Connect to MongoDB
 connectDB();
@@ -104,6 +125,7 @@ app.use('/api', projectRoutes)
 app.use('/api', galleryRoutes)
 app.use('/api', dashboardRoutes)
 app.use('/api', blogsRoutes)
+app.use('/api', quoteRoutes)
     // Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({

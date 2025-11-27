@@ -6,7 +6,7 @@ import h3 from "../assets/herosection/Banner3.webp";
 import h4 from "../assets/herosection/Banner4.webp";
 import OptimizedImage from "./OptimizedImage";
 import MobileHeroSection from "./MobileHeroSection";
-
+import { useNavigate } from "react-router-dom";
 // Preload LCP image
 const preloadImage = (src) => {
   const img = new Image();
@@ -17,7 +17,7 @@ preloadImage(h1);
 const slides = [
   {
     id: 1,
-    image: h1,
+    image: h4,
     welcome: "TRASH REMOVAL & FLOOR CARE",
     title: "Reliable Trash Removal & Professional Floor Care",
     description:
@@ -25,7 +25,7 @@ const slides = [
   },
   {
     id: 2,
-    image: h2,
+    image: h3,
     welcome: "MOVE-IN / MOVE-OUT CLEANING",
     title: "Move-In & Move-Out Cleaning You Can Trust",
     description:
@@ -33,7 +33,7 @@ const slides = [
   },
   {
     id: 3,
-    image: h3,
+    image: h1,
     welcome: "OFFICE & COMMERCIAL CLEANING",
     title: "Professional Office & Commercial Cleaning Services",
     description:
@@ -41,7 +41,7 @@ const slides = [
   },
   {
     id: 4,
-    image: h4,
+    image: h2,
     welcome: "RESTROOM SANITIZATION",
     title: "Reliable Restroom Sanitization & Hygiene Cleaning",
     description:
@@ -55,6 +55,7 @@ const HeroSection = () => {
   const [isTablet, setIsTablet] = useState(false);
   const length = slides.length;
 
+  const navigate =  useNavigate();
   // SCREEN CHECK
   useEffect(() => {
     const check = () => {
@@ -132,12 +133,13 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full bg-[#0683ba] px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-white font-semibold shadow-lg hover:bg-[#0098da] transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 min-h-[44px]"
-              >
-                Get a Quote{" "}
-                <FaArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
+  href="/quote"
+  className="inline-flex items-center justify-center rounded-full bg-[#0683ba] px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-white font-semibold shadow-lg hover:bg-[#0098da] transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 min-h-[44px]"
+>
+  Get a Quote{" "}
+  <FaArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5" />
+</a>
+
 
               <a
                 href="tel:+18443880988"

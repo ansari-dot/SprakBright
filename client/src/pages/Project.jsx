@@ -4,6 +4,7 @@ import PageTransition from "../components/PageTransition";
 import { FiArrowRight, FiEye, FiLink, FiX, FiLoader } from "react-icons/fi";
 import api,{resolveImageUrl} from '../services/api'
 import OptimizedImage from "../components/OptimizedImage";
+import ImageCompareSlider from "../components/ImageCompareSlider";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -23,10 +24,7 @@ const Project = () => {
   const fetchGallery = async () => {
     try {
       const response  =  await api.get('/gallery/get');
-        console.log('gallery',response.data)
       setGallery(response.data)
-
-      
     } catch (err) {
       console.error("Error fetching gallery:", err);
       setError(prev => ({ ...prev, gallery: "Failed to load gallery" }));
@@ -207,28 +205,39 @@ const Project = () => {
           </div>
 
 {/* Gallery Grid */}
-<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-  {gallery.map((gal) =>
-    gal.images.map((imageUrl, index) => (
-      <div
-        key={`${gal._id}-${index}`} // Unique key per image
-        className="group relative overflow-hidden rounded-lg aspect-square cursor-pointer"
-        onClick={() => setSelectedImage(resolveImageUrl(imageUrl))}
-      >
-        <OptimizedImage
-          src={resolveImageUrl(imageUrl)}
-          alt={`Gallery image ${index + 1}`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          loading="lazy"
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {gallery.map((gal) => (
+    <div
+      key={gal._id}
+      className="group relative overflow-hidden rounded-lg h-64 cursor-pointer"
+    >
+      {gal.clean && gal.dirty && gal.dirty.length > 0 ? (
+        <ImageCompareSlider
+          cleanImageSrc={resolveImageUrl(gal.clean)}
+          dirtyImageSrc={resolveImageUrl(gal.dirty[0])} // Assuming the first dirty image for comparison
+          imageName={`Gallery Item ${gal._id}`}
         />
-        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full transform transition-transform group-hover:scale-110">
-            <FiEye className="text-white text-2xl" />
+      ) : (
+        <div
+          className="relative w-full h-full"
+          onClick={() => setSelectedImage(resolveImageUrl(gal.clean || gal.dirty[0]))}
+        >
+          <OptimizedImage
+            src={resolveImageUrl(gal.clean || gal.dirty[0])}
+            alt={`Gallery image for ${gal._id}`}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full transform transition-transform group-hover:scale-110">
+              <FiEye className="text-white text-2xl" />
+            </div>
           </div>
+          
         </div>
-      </div>
-    ))
-  )}
+      )}
+    </div>
+  ))}
 </div>
 
 
