@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch, FaArrowLeft } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api,{resolveImageUrl} from "../services/api";
 import OptimizedImage from "../components/OptimizedImage";
 
 export default function BlogsPage() {
@@ -92,7 +93,7 @@ export default function BlogsPage() {
           <article className="bg-white rounded-xl shadow-md overflow-hidden">
             <div className="relative h-96">
               <OptimizedImage
-                src={singlePost.featuredImage || singlePost.image}
+                src={resolveImageUrl(singlePost.featuredImage || singlePost.image)}
                 alt={singlePost.title}
                 className="w-full h-full object-cover"
               />
@@ -154,7 +155,7 @@ export default function BlogsPage() {
               >
                 <div className="relative h-60">
                   <OptimizedImage
-                    src={blog.featuredImage || blog.image}
+                    src={resolveImageUrl(blog.featuredImage || blog.image)}
                     alt={blog.title}
                     className="w-full h-full object-cover"
                   />
