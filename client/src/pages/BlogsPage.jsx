@@ -12,51 +12,26 @@ export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const [singlePost, setSinglePost] = useState(null);
-  const [isSinglePost, setIsSinglePost] = useState(false);
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      setError(null);
-      const endpoint = id ? `/blogs/get/${id}` : '/blogs/get';
-      console.log(`Fetching blog data from: ${endpoint}`);
+      const res = await api.get('/blogs/get');
+      console.log('Fetched blogs:', res.data);
       
-      const res = await api.get(endpoint);
-      console.log('Raw blog data:', res.data);
+      // Handle multiple posts
+      let blogsData = res.data?.data || res.data || [];
+      blogsData = Array.isArray(blogsData) ? blogsData : [];
       
-      if (id) {
-        // Handle single post
-        const postData = res.data?.data || res.data;
-        console.log('Single post data:', postData);
-        
-        // Keep original image URLs, we'll resolve them at render time
-        const processedPost = {
-          ...postData,
-          image: postData.image || postData.featuredImage,
-          featuredImage: postData.featuredImage || postData.image
-        };
-        
-        console.log('Processed post with original image paths:', processedPost);
-        setSinglePost(processedPost);
-        setIsSinglePost(true);
-      } else {
-        // Handle multiple posts - keep original URLs
-        let blogsData = res.data?.data || res.data || [];
-        blogsData = Array.isArray(blogsData) ? blogsData : [];
-        
-        const processedBlogs = blogsData.map(blog => ({
-          ...blog,
-          image: blog.image || blog.featuredImage,
-          featuredImage: blog.featuredImage || blog.image
-        }));
-        
-        console.log('Processed blogs with original image paths:', processedBlogs);
-        setBlogs(processedBlogs);
-      }
+      const blogsWithResolvedImages = blogsData.map(blog => ({
+        ...blog,
+        image: resolveImageUrl(blog.image || blog.featuredImage)
+      }));
+      setBlogs(blogsWithResolvedImages);
     } catch (err) {
       console.error("Error fetching blogs:", err);
-      setError(id ? "Failed to load blog post" : "Failed to load blogs. Please try again later.");
+      setError("Failed to load blogs. Please try again later.");
+      setBlogs([]);
     } finally {
       setLoading(false);
     }
@@ -64,7 +39,7 @@ export default function BlogsPage() {
 
   useEffect(() => {
     fetchBlogs();
-  }, [id]);
+  }, []);
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -96,52 +71,6 @@ export default function BlogsPage() {
         >
           Retry
         </button>
-      </div>
-    );
-  }
-
-  if (isSinglePost && singlePost) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-[#0098da] hover:text-[#0683ba] mb-6 transition-colors"
-          >
-            <FaArrowLeft className="mr-2" />
-            Back to Blog
-          </button>
-          
-          <article className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="relative h-96">
-              <OptimizedImage
-                src={resolveImageUrl(singlePost.featuredImage || singlePost.image)}
-                alt={singlePost.title}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const originalSrc = singlePost.featuredImage || singlePost.image;
-                  console.error('Error loading blog post image:', originalSrc);
-                  console.log('Resolved URL was:', resolveImageUrl(originalSrc));
-                  e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
-                }}
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                <div className="bg-[#0098da] text-white text-sm font-medium px-3 py-1 rounded-full inline-block mb-4">
-                  {singlePost.category || "Uncategorized"}
-                </div>
-                <h1 className="text-3xl font-bold text-white">{singlePost.title}</h1>
-                <div className="flex items-center text-white/90 mt-4">
-                  <FaCalendarAlt className="mr-2" />
-                  <span>{formatDate(singlePost.publishedAt || singlePost.createdAt || singlePost.date)}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-8 prose max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: singlePost.content }} />
-            </div>
-          </article>
-        </div>
       </div>
     );
   }
@@ -183,14 +112,12 @@ export default function BlogsPage() {
               >
                 <div className="relative h-60">
                   <OptimizedImage
-                    src={resolveImageUrl(blog.featuredImage || blog.image)}
+                    src={blog.image}
                     alt={blog.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const originalSrc = blog.featuredImage || blog.image;
-                      console.error('Error loading blog list image:', originalSrc);
-                      console.log('Resolved URL was:', resolveImageUrl(originalSrc));
-                      e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
+                      console.error('Error loading blog image:', blog.image);
+                      e.target.src = '/images/fallback-blog.jpg';
                     }}
                   />
                   <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
