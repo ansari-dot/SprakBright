@@ -56,26 +56,24 @@ export default function BlogsSection() {
       setError(null);
       console.log('Fetching blog posts...');
       const res = await api.get("/blogs/get");
+      console.log('Fetched blogs:', res.data);
       
       // Handle both old and new response formats
       const blogs = res.data?.data || res.data || [];
-      console.log('Raw blog data:', blogs);
       
-      // Keep original image URLs, we'll resolve them at render time
-      const processedBlogs = blogs.map(blog => ({
+      // Ensure all image paths are properly resolved
+      const blogsWithResolvedImages = blogs.map(blog => ({
         ...blog,
-        image: blog.image || blog.featuredImage,
-        featuredImage: blog.featuredImage || blog.image
+        image: resolveImageUrl(blog.image || blog.featuredImage)
       }));
       
       // Show only the first 3 blog posts
-      const firstThreeBlogs = Array.isArray(processedBlogs) ? processedBlogs.slice(0, 3) : [];
-      console.log('First 3 blogs with original image paths:', firstThreeBlogs);
+      const firstThreeBlogs = Array.isArray(blogsWithResolvedImages) ? blogsWithResolvedImages.slice(0, 3) : [];
       setBlogPosts(firstThreeBlogs);
     } catch (err) {
       console.error("Error fetching blogs:", err);
       setError("Failed to load blogs. Please try again later.");
-      toast.error("Failed to load blogs");
+      setBlogPosts([]);
     } finally {
       setLoading(false);
     }
