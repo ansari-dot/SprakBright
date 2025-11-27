@@ -1,163 +1,170 @@
-
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import api, { resolveImageUrl } from "../services/api";
 import OptimizedImage from "../components/OptimizedImage";
 
 export default function BlogsPage() {
-    const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-    const fetchBlogs = async () => {
-        try {
-            setLoading(true);
-            const res = await api.get("/blogs/get");
-            setBlogs(res.data);
-        } catch (err) {
-            console.error("Error fetching blogs:", err);
-            setError("Failed to load blogs. Please try again later.");
-            setBlogs([]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchBlogs();
-    }, []);
-
-    const formatDate = (dateString) => {
-        if (!dateString) return "";
-        const options = { year: "numeric", month: "long", day: "numeric" };
-        return new Date(dateString).toLocaleDateString("en-US", options);
-    };
-
-    const filteredBlogs = blogs.filter(
-        (blog) =>
-            blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            blog.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            blog.category?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <FaSpinner className="animate-spin text-4xl text-[#0098da]" />
-            </div>
-        );
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/blogs/get");
+      setBlogs(res.data);
+    } catch (err) {
+      console.error("Error fetching blogs:", err);
+      setError("Failed to load blogs. Please try again later.");
+      setBlogs([]);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (error) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
-                <p className="text-red-500 text-lg mb-4">{error}</p>
-                <button
-                    onClick={fetchBlogs}
-                    className="px-6 py-2 bg-[#0098da] text-white rounded-md hover:bg-[#0683ba] transition-colors"
-                >
-                    Retry
-                </button>
-            </div>
-        );
-    }
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
+  const filteredBlogs = blogs.filter(
+    (blog) =>
+      blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 md:pt-28">
-            {/* HERO */}
-            <div className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white py-16 md:py-20">
-                <div className="container mx-auto px-6 text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Blog</h1>
-                    <p className="text-xl opacity-90 max-w-2xl mx-auto">
-                        Discover the latest cleaning tips, industry news, and professional advice
+      <div className="min-h-screen flex items-center justify-center">
+        <FaSpinner className="animate-spin text-4xl text-[#0098da]" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
+        <p className="text-red-500 text-lg mb-4">{error}</p>
+        <button
+          onClick={fetchBlogs}
+          className="px-6 py-2 bg-[#0098da] text-white rounded-md hover:bg-[#0683ba] transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pt-24 md:pt-28">
+
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white py-16 md:py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Blog</h1>
+          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+            Discover the latest cleaning tips, industry news, and professional advice
+          </p>
+
+          {/* Search Bar */}
+          <div className="mt-8 max-w-2xl mx-auto relative">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-6 py-4 pr-12 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0098da]"
+              />
+              <FaSearch className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Blog Grid */}
+      <div className="container mx-auto px-6 pb-16 pt-8">
+        {filteredBlogs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredBlogs.map((blog) => {
+              const blogImageUrl = resolveImageUrl(blog.image);
+
+              return (
+                <article
+                  key={blog._id || blog.id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full flex flex-col"
+                >
+                  <div className="relative h-60">
+                    <OptimizedImage
+                      src={blogImageUrl}
+                      alt={blog.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error("Blog image loading error:", {
+                          originalSrc: blog.image,
+                          resolvedUrl: blogImageUrl,
+                          blogId: blog._id,
+                          blogTitle: blog.title,
+                          error: e, // Include the full error object
+                        });
+
+                        e.target.src =
+                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkltYWdlIEZhaWxlZCB0b2xvYWQ8L3RleHQ+PC9zdmc+"; // Changed text
+                      }}
+                    />
+                    <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
+                      {blog.category || "Uncategorized"}
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center text-gray-500 text-sm mb-3">
+                      <FaCalendarAlt className="mr-2 text-[#0098da]" />
+                      <span>{formatDate(blog.publishedAt || blog.createdAt || blog.date)}</span>
+                    </div>
+
+                    <h2 className="text-xl font-bold text-gray-800 mb-3 hover:text-[#0098da] transition-colors">
+                      <Link to={`/blog/${blog.slug}`} className="hover:underline">
+                        {blog.title}
+                      </Link>
+                    </h2>
+
+                    <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
+                      {blog.excerpt ||
+                        blog.snippet ||
+                        (blog.content?.substring(0, 150) + "...")}
                     </p>
 
-                    {/* SEARCH BAR */}
-                    <div className="mt-8 max-w-2xl mx-auto relative">
-                        <input
-                            type="text"
-                            placeholder="Search articles..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full px-6 py-4 pr-12 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0098da]"
-                        />
-                        <FaSearch className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    </div>
-                </div>
-            </div>
-
-            {/* BLOG GRID */}
-            <div className="container mx-auto px-6 pb-16 pt-8">
-                {filteredBlogs.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredBlogs.map((blog) => (
-                            <article
-                                key={blog._id}
-                                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full flex flex-col"
-                            >
-                                <div className="relative h-60">
-                                    <OptimizedImage
-                                        src={resolveImageUrl(blog.image)}
-                                        alt={blog.title}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                            console.error("Blog image failed:", blog);
-                                            e.target.src =
-                                                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkltYWdlIE5vdCBGb3VuZDwvdGV4dD48L3N2Zz4=";
-                                        }}
-                                    />
-                                    <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
-                                        {blog.category || "Uncategorized"}
-                                    </div>
-                                </div>
-
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <div className="flex items-center text-gray-500 text-sm mb-3">
-                                        <FaCalendarAlt className="mr-2 text-[#0098da]" />
-                                        <span>
-                                            {formatDate(
-                                                blog.publishedAt || blog.createdAt || blog.date
-                                            )}
-                                        </span>
-                                    </div>
-
-                                    <h2 className="text-xl font-bold text-gray-800 mb-3 hover:text-[#0098da] transition-colors">
-                                        <Link to={`/blog/${blog.slug}`} className="hover:underline">
-                                            {blog.title}
-                                        </Link>
-                                    </h2>
-
-                                    <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
-                                        {blog.excerpt ||
-                                            blog.snippet ||
-                                            (blog.content?.substring(0, 150) + "...")}
-                                    </p>
-
-                                    <Link className="inline-flex items-center text-[#0098da] font-medium hover:text-[#0683ba] transition-colors mt-auto">
-                                        Read More
-                                        <FaArrowRight className="ml-2" />
-                                    </Link>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-16">
-                        <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                            {searchTerm
-                                ? "No matching articles found"
-                                : "No blog posts available yet"}
-                        </h3>
-                        <p className="text-gray-500">
-                            {searchTerm
-                                ? "Try a different search term"
-                                : "Check back soon for new articles!"}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+                    <Link className="inline-flex items-center text-[#0098da] font-medium hover:text-[#0683ba] transition-colors mt-auto">
+                      Read More
+                      <FaArrowRight className="ml-2" />
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+              {searchTerm ? "No matching articles found" : "No blog posts available yet"}
+            </h3>
+            <p className="text-gray-500">
+              {searchTerm
+                ? "Try a different search term"
+                : "Check back soon for new articles!"}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
