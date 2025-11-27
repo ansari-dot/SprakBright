@@ -1,9 +1,8 @@
 
-
 import { useState, useEffect } from "react";
-import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch, FaArrowLeft } from "react-icons/fa";
+import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import api,{resolveImageUrl} from "../services/api";
+import api, { resolveImageUrl } from "../services/api";
 import OptimizedImage from "../components/OptimizedImage";
 
 export default function BlogsPage() {
@@ -11,24 +10,12 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const { id } = useParams();
-  const navigate = useNavigate();
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/blogs/get');
-      console.log('Fetched blogs:', res.data);
-      
-      // Handle multiple posts
-      let blogsData = res.data?.data || res.data || [];
-      blogsData = Array.isArray(blogsData) ? blogsData : [];
-      
-      const blogsWithResolvedImages = blogsData.map(blog => ({
-        ...blog,
-        image: resolveImageUrl(blog.image || blog.featuredImage)
-      }));
-      setBlogs(blogsWithResolvedImages);
+      const res = await api.get("/blogs/get");
+      setBlogs(res.data);
     } catch (err) {
       console.error("Error fetching blogs:", err);
       setError("Failed to load blogs. Please try again later.");
@@ -43,15 +30,16 @@ export default function BlogsPage() {
   }, []);
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    if (!dateString) return "";
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
-  const filteredBlogs = blogs.filter(blog => 
-    blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredBlogs = blogs.filter(
+    (blog) =>
+      blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -78,6 +66,7 @@ export default function BlogsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24 md:pt-28">
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white py-16 md:py-20">
         <div className="container mx-auto px-6 text-center">
@@ -85,7 +74,7 @@ export default function BlogsPage() {
           <p className="text-xl opacity-90 max-w-2xl mx-auto">
             Discover the latest cleaning tips, industry news, and professional advice
           </p>
-          
+
           {/* Search Bar */}
           <div className="mt-8 max-w-2xl mx-auto relative">
             <div className="relative">
@@ -106,53 +95,62 @@ export default function BlogsPage() {
       <div className="container mx-auto px-6 pb-16 pt-8">
         {filteredBlogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs.map((blog) => (
-              <article
-                key={blog._id || blog.id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full flex flex-col"
-              >
-                <div className="relative h-60">
-                  <OptimizedImage
-                    src={blog.image}
-                    alt={blog.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      console.error('Blog image loading error:', {
-                        originalSrc: blog.image,
-                        resolvedUrl: resolveImageUrl(blog.image),
-                        blogId: blog._id,
-                        blogTitle: blog.title
-                      });
-                      // Set a fallback image
-                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkJsb2cgSW1hZ2UgVW5hdmFpbGFibGU8L3RleHQ+PC9zdmc+';
-                    }}
-                  />
-                  <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
-                    {blog.category || "Uncategorized"}
+            {filteredBlogs.map((blog) => {
+              const blogImageUrl = resolveImageUrl(blog.image);
+
+              return (
+                <article
+                  key={blog._id || blog.id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full flex flex-col"
+                >
+                  <div className="relative h-60">
+                    <OptimizedImage
+                      src={blogImageUrl}
+                      alt={blog.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error("Blog image loading error:", {
+                          originalSrc: blog.image,
+                          resolvedUrl: blogImageUrl,
+                          blogId: blog._id,
+                          blogTitle: blog.title,
+                        });
+
+                        e.target.src =
+                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2Y0ZjRmNCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkJsb2cgSW1hZ2UgVW5hdmFpbGFibGU8L3RleHQ+PC9zdmc+";
+                      }}
+                    />
+                    <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
+                      {blog.category || "Uncategorized"}
+                    </div>
                   </div>
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-gray-500 text-sm mb-3">
-                    <FaCalendarAlt className="mr-2 text-[#0098da]" />
-                    <span>{formatDate(blog.publishedAt || blog.createdAt || blog.date)}</span>
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-800 mb-3 hover:text-[#0098da] transition-colors">
-                    <Link to={`/blog/${blog.slug}`} className="hover:underline">
-                      {blog.title}
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center text-gray-500 text-sm mb-3">
+                      <FaCalendarAlt className="mr-2 text-[#0098da]" />
+                      <span>{formatDate(blog.publishedAt || blog.createdAt || blog.date)}</span>
+                    </div>
+
+                    <h2 className="text-xl font-bold text-gray-800 mb-3 hover:text-[#0098da] transition-colors">
+                      <Link to={`/blog/${blog.slug}`} className="hover:underline">
+                        {blog.title}
+                      </Link>
+                    </h2>
+
+                    <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
+                      {blog.excerpt ||
+                        blog.snippet ||
+                        (blog.content?.substring(0, 150) + "...")}
+                    </p>
+
+                    <Link className="inline-flex items-center text-[#0098da] font-medium hover:text-[#0683ba] transition-colors mt-auto">
+                      Read More
+                      <FaArrowRight className="ml-2" />
                     </Link>
-                  </h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
-                    {blog.excerpt || blog.snippet || (blog.content?.substring(0, 150) + '...')}
-                  </p>
-                  <Link
-                    className="inline-flex items-center text-[#0098da] font-medium hover:text-[#0683ba] transition-colors mt-auto"
-                  >
-                    Read More
-                    <FaArrowRight className="ml-2" />
-                  </Link>
-                </div>
-              </article>
-            ))}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-16">
