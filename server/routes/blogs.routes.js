@@ -10,6 +10,8 @@ const router = express.Router();
 router.post('/blogs/add', auth, upload.single('image'), convertToWebP, (req, res) => blogsController.addBlogs(req, res));
 // the path to get all the blogs
 router.get('/blogs/get', (req, res) => blogsController.getBlogs(req, res))
+// the path to update blog image paths (remove /api prefix)
+router.post('/blogs/update-image-paths', auth, (req, res) => blogsController.updateBlogImagePaths(req, res))
 
 
 export default router;
