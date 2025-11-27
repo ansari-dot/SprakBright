@@ -1,4 +1,5 @@
 
+
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch, FaArrowLeft } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -20,17 +21,47 @@ export default function BlogsPage() {
       setLoading(true);
       setError(null);
       const endpoint = id ? `/blogs/get/${id}` : '/blogs/get';
+      console.log(`Fetching blog data from: ${endpoint}`);
+      
       const res = await api.get(endpoint);
+      console.log('Raw blog data:', res.data);
       
       if (id) {
-        // Handle both old and new response formats for single post
+        // Handle single post
         const postData = res.data?.data || res.data;
-        setSinglePost(postData);
+        console.log('Single post data:', postData);
+        
+        // Resolve image URL for single post
+        const processedPost = {
+          ...postData,
+          image: resolveImageUrl(postData.image || postData.featuredImage),
+          featuredImage: resolveImageUrl(postData.image || postData.featuredImage)
+        };
+        console.log('Processed post with resolved image:', processedPost);
+        
+        setSinglePost(processedPost);
         setIsSinglePost(true);
       } else {
-        // Handle both old and new response formats for multiple posts
-        const blogsData = res.data?.data || res.data || [];
-        setBlogs(Array.isArray(blogsData) ? blogsData : []);
+        // Handle multiple posts
+        let blogsData = res.data?.data || res.data || [];
+        blogsData = Array.isArray(blogsData) ? blogsData : [];
+        
+        // Process and log each blog's image URL
+        const processedBlogs = blogsData.map(blog => {
+          const imageUrl = resolveImageUrl(blog.image || blog.featuredImage);
+          console.log(`Processing blog: ${blog.title}`);
+          console.log(`- Original image: ${blog.image || blog.featuredImage}`);
+          console.log(`- Resolved URL: ${imageUrl}`);
+          
+          return {
+            ...blog,
+            image: imageUrl,
+            featuredImage: imageUrl
+          };
+        });
+        
+        console.log('Processed blogs with resolved images:', processedBlogs);
+        setBlogs(processedBlogs);
       }
     } catch (err) {
       console.error("Error fetching blogs:", err);
@@ -93,9 +124,13 @@ export default function BlogsPage() {
           <article className="bg-white rounded-xl shadow-md overflow-hidden">
             <div className="relative h-96">
               <OptimizedImage
-                src={resolveImageUrl(singlePost.featuredImage || singlePost.image)}
+                src={singlePost.featuredImage || singlePost.image}
                 alt={singlePost.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error('Error loading blog post image:', singlePost.featuredImage || singlePost.image);
+                  e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
+                }}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                 <div className="bg-[#0098da] text-white text-sm font-medium px-3 py-1 rounded-full inline-block mb-4">
@@ -155,9 +190,13 @@ export default function BlogsPage() {
               >
                 <div className="relative h-60">
                   <OptimizedImage
-                    src={resolveImageUrl(blog.featuredImage || blog.image)}
+                    src={blog.featuredImage || blog.image}
                     alt={blog.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.error('Error loading blog list image:', blog.featuredImage || blog.image);
+                      e.target.src = '/path/to/default-blog-image.jpg'; // Add a default blog image
+                    }}
                   />
                   <div className="absolute top-4 right-4 bg-[#0098da] text-white text-xs font-medium px-3 py-1 rounded-full">
                     {blog.category || "Uncategorized"}
