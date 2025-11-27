@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   FaPhone,
@@ -22,22 +23,24 @@ const Footer = () => {
         <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left h-full">
           <Link to="/" className="flex items-center group transition-all duration-300 mb-2">
             <div className="relative">
-              <div className="absolute -inset-3 bg-gradient-to-r from-blue-200 to-cyan-200 rounded-full opacity-0 group-hover:opacity-80 blur-xl transition-all duration-500"></div>
-              <OptimizedImage 
+              <div className="absolute -inset-3 bg-gradient-to-r from-blue-200 to-cyan-200 rounded-full opacity-0 group-hover:opacity-80 blur-xl transition-all duration-500 scale-95 group-hover:scale-100"></div>
+
+              <OptimizedImage
                 src={logo}
                 alt="Spark Bright Cleaning Services"
-                className="h-28 w-auto sm:h-28 md:h-28 lg:h-32 relative z-10"
+                className="h-28 w-auto sm:h-28 md:h-28 lg:h-32 relative z-10 rounded-sm border-2 border-transparent group-hover:border-white/20"
                 width={280}
                 height={110}
                 loading="eager"
                 style={{
-                  filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
+                  filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))',
                   transform: 'scale(1.15)',
-                  transition: 'all 0.3s ease-out'
+                  transition: 'all 0.3s ease-out',
                 }}
               />
             </div>
-          </Link> 
+          </Link>
+
           <h2 className="text-2xl font-bold text-white mt-1">
             Spark Bright Cleaning Services
           </h2>
@@ -89,7 +92,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-        </div>  
+        </div>
 
         {/* Quick Links */}
         <div className="flex flex-col justify-center text-center md:text-left h-full">
@@ -98,28 +101,27 @@ const Footer = () => {
             <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
           </h3>
 
-         <ul className="space-y-2 mt-4">
-  {[
-    { name: "Home", link: "/" },
-    { name: "About Us", link: "/aboutus" },
-    { name: "Our Services", link: "/services" },
-    { name: "Get Quote", link: "/quote" },
-    { name: "Our Team", link: "/aboutus" },
-    { name: "Blog", link: "/blog" },
-    { name: "Contact Us", link: "/contactus" },
-  ].map((item, index) => (
-    <li key={index}>
-      <a
-        href={item.link}
-        className="flex items-center text-gray-100 hover:text-black transition-colors group"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#0098da] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-        <span>{item.name}</span>
-      </a>
-    </li>
-  ))}
-</ul>
-
+          <ul className="space-y-2 mt-4">
+            {[
+              { name: "Home", link: "/" },
+              { name: "About Us", link: "/aboutus" },
+              { name: "Our Services", link: "/services" },
+              { name: "Get Quote", link: "/quote" },
+              { name: "Our Team", link: "/aboutus" },
+              { name: "Blog", link: "/blog" },
+              { name: "Contact Us", link: "/contactus" },
+            ].map((item, index) => (
+              <li key={index}>
+                <a
+                  href={item.link}
+                  className="flex items-center text-gray-100 hover:text-black transition-colors group"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0098da] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  <span>{item.name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Our Services */}
@@ -130,9 +132,15 @@ const Footer = () => {
           </h3>
 
           <ul className="space-y-2 mt-4">
-            {["Residential Cleaning","Commercial Cleaning","Move In/Out Cleaning","Carpet Cleaning","Office Cleaning",].map((service,index)=>(
+            {[
+              "Residential Cleaning",
+              "Commercial Cleaning",
+              "Move In/Out Cleaning",
+              "Carpet Cleaning",
+              "Office Cleaning",
+            ].map((service, index) => (
               <li key={index}>
-                <a href="#" className="flex items-center text-gray-100 hover:text-black transition-colors group">
+                <a href="/services" className="flex items-center text-gray-100 hover:text-black transition-colors group">
                   <span className="w-6 h-6 flex items-center justify-center bg-blue-50 text-[#0098da] rounded-full mr-3 text-sm group-hover:bg-blue-100"></span>
                   <span>{service}</span>
                 </a>
@@ -141,7 +149,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Newsletter & Social Media */}
+        {/* Newsletter */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <h3 className="text-[#ffff] font-semibold mb-6 text-lg relative inline-block tracking-wide">
             Newsletter
@@ -173,7 +181,7 @@ const Footer = () => {
             </div>
           </form>
 
-          {/* Social Media Icons */}
+          {/* Social Icons */}
           <div className="mt-6">
             <div className="flex space-x-3">
               {[
@@ -199,7 +207,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom bar */}
       <div className="mt-8 pt-3 border-t border-blue-400 text-center">
         <p className="text-white text-sm">
           &copy; {new Date().getFullYear()} Spark Bright Cleaning Services. All rights reserved.
