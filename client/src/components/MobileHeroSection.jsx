@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { FaPhone, FaArrowRight } from "react-icons/fa";
 import h1 from '../assets/herosection/Banner1.webp';
@@ -98,7 +99,7 @@ const MobileHeroSection = () => {
       ))}
 
       {/* Hero Content */}
-      <div className="relative z-30 h-full flex items-start pt-16">
+      <div className="relative z-30 h-full flex items-start pt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             {/* Welcome Tag */}
