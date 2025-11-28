@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   FaPhone,
@@ -27,37 +28,35 @@ const Footer = () => {
               <OptimizedImage
                 src={logo}
                 alt="Spark Bright Cleaning Services"
-                className="h-28 w-auto sm:h-28 md:h-28 lg:h-32 relative z-10 rounded-sm border-2 border-transparent group-hover:border-white/20"
-                width={280}
-                height={110}
+                className="h-32 w-auto sm:h-32 md:h-36 lg:h-40 relative z-10 rounded-sm border-2 border-transparent group-hover:border-white/20"
+                width={320}
+                height={140}
                 loading="eager"
                 style={{
-                  filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))',
-                  transform: 'scale(1.15)',
+                  filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3))',
+                  transform: 'scale(1.2)',
                   transition: 'all 0.3s ease-out',
                 }}
               />
             </div>
           </Link>
 
-          <h2 className="text-2xl font-bold text-white mt-1">
-            Spark Bright Cleaning Services
-          </h2>
+          
 
           <p className="mb-4 max-w-xs text-gray-100 leading-relaxed mt-2">
             Professional cleaning services that transform your space into a spotless, healthy environment.
           </p>
 
           {/* Contact Info */}
-          <div className="space-y-2 w-full">
-            <div className="flex items-center space-x-3">
+          <div className="space-y-4 w-full">
+            <div className="flex items-start space-x-4 sm:items-center">
               <div className="bg-[#0098da] p-2 rounded-full text-white flex-shrink-0">
                 <FaMapMarkerAlt className="w-4 h-4" />
               </div>
-              <p className="text-gray-100 text-sm">1886 Metro Center Dr, Reston, VA 20190</p>
+              <p className="text-gray-100 text-sm leading-relaxed">1886 Metro Center Dr, Reston, VA 20190</p>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <div className="bg-[#0098da] p-2 rounded-full text-white flex-shrink-0">
                 <FaPhone className="w-4 h-4" />
               </div>
@@ -69,7 +68,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <div className="bg-[#0098da] p-2 rounded-full text-white flex-shrink-0">
                 <FaEnvelope className="w-4 h-4" />
               </div>
@@ -81,7 +80,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <div className="bg-[#0098da] p-2 rounded-full text-white flex-shrink-0">
                 <FaClock className="w-4 h-4" />
               </div>
@@ -97,7 +96,7 @@ const Footer = () => {
         <div className="flex flex-col justify-center text-center md:text-left h-full md:ml-4">
           <h3 className="text-white font-semibold mb-4 text-lg relative inline-block tracking-wide">
             Quick Links
-            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
+            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-1/2 transform -translate-x-1/2 md:left-0 md:transform-none rounded-full -mb-1"></span>
           </h3>
 
           <ul className="space-y-2 mt-4">
@@ -127,16 +126,15 @@ const Footer = () => {
         <div className="flex flex-col justify-center text-center md:text-left h-full">
           <h3 className="text-white font-semibold mb-4 text-lg relative inline-block tracking-wide">
             Our Services
-            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
+            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-1/2 transform -translate-x-1/2 md:left-0 md:transform-none rounded-full -mb-1"></span>
           </h3>
 
           <ul className="space-y-2 mt-4">
             {[
-              "Residential Cleaning",
-              "Commercial Cleaning",
-              "Move In/Out Cleaning",
-              "Carpet Cleaning",
-              "Office Cleaning",
+              "Move-In / Move-Out Cleaning",
+              "Trash Removal & Floor Care",
+              "Restroom Sanitization",
+              "Office & Commercial Cleaning",
             ].map((service, index) => (
               <li key={index}>
                 <a href="/services" className="flex items-center text-gray-100 hover:text-black transition-colors group">
@@ -152,7 +150,7 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <h3 className="text-[#ffff] font-semibold mb-6 text-lg relative inline-block tracking-wide">
             Newsletter
-            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-0 rounded-full -mb-1"></span>
+            <span className="absolute w-12 h-1 bg-gradient-to-r from-[#0098da] to-[#0683ba] bottom-0 left-1/2 transform -translate-x-1/2 md:left-0 md:transform-none rounded-full -mb-1"></span>
           </h3>
 
           <p className="text-[#ffff] mb-6">
