@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProjects, setSelectedProject } from '../features/projects/projectSlice';
 import { FiArrowLeft, FiMapPin, FiCalendar, FiLayers, FiCheckCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import PageTransition from '../components/PageTransition';
 import api, { resolveImageUrl } from '../services/api';
 
 const defaultProject = {
@@ -101,7 +100,6 @@ const ProjectDetail = () => {
   }
 
   return (
-    <PageTransition>
       <motion.div
         className="min-h-screen bg-gray-50"
         initial="hidden"
@@ -211,7 +209,6 @@ const ProjectDetail = () => {
           </div>
         </div>
       </motion.div>
-    </PageTransition>
   );
 };
 
