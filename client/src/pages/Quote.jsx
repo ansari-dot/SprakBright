@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PageTransition from "../components/PageTransition";
 import api from "../services/api"; // Import the API instance
 
 const Quote = () => {
@@ -46,8 +45,7 @@ const Quote = () => {
   };
 
   return (
-    <PageTransition>
-      <div className="bg-white relative overflow-hidden font-sans pt-48 md:pt-24">
+    <div className="min-h-screen bg-gray-50 pt-48 md:pt-24">
         {/* Header Section */}
         <div className="bg-white py-12 px-4">
           <div className="container mx-auto text-center">
@@ -140,9 +138,9 @@ const Quote = () => {
             </form>
           </div>
         </section>
-      </div>
-    </PageTransition>
+    </div>
   );
 };
 
 export default Quote;
+
