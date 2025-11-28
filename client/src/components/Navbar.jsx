@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import logo from '../assets/logo.webp';
 import TopContactBar from './TopContactBar';
@@ -115,6 +116,7 @@ const Navbar = () => {
           <button
             type="button"
             className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white mt-6 text-sm hover:opacity-90 active:scale-95 transition-all w-full h-11 rounded-full shadow-md"
+            onClick={()=>navigate('/quote')}
           >
             Get Quote
           </button>
