@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import OptimizedImage from "./OptimizedImage";
@@ -66,8 +68,7 @@ const Testimonial = () => {
     <section className="relative bg-white py-20 px-6 md:px-0 max-w-7xl mx-auto text-center">
       {/* Heading */}
       <h2 className="font-bold text-2xl md:text-3xl mb-12 font-poppins">
-        Our expert team serves <br />
-        <span className="text-[#0098da]">you the best cleaning service</span>
+        What Our <span className="text-[#0098da]">Clients Say</span>
       </h2>
 
       {/* Single testimonial card */}
@@ -88,7 +89,7 @@ const Testimonial = () => {
               e.target.src = '/path/to/default-avatar.png'; // Add a default avatar image
             }}
           />
-        </div> 
+        </div> {/* ✅ Close the div properly */}
 
         {/* Testimonial text */}
         <p className="text-gray-700 max-w-xl mx-auto mb-6 italic text-lg font-poppins">
@@ -129,4 +130,3 @@ const Testimonial = () => {
 };
 
 export default Testimonial;
-
