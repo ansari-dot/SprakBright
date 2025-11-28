@@ -1,3 +1,4 @@
+
 import React from "react";
 import mainImage from "../assets/herosection/Banner1.webp";
 import smallImage from "../assets/herosection/Banner2.webp";
@@ -64,7 +65,7 @@ const AboutUsSection = () => {
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight font-poppins">
             About <span className="text-[#0098da]">Spark Bright</span>{" "}
-            <span className="text-[#0683ba]">Cleaning Services</span>
+            <span className="text-[#0683ba]">Cleaning </span>
           </h2>
 
           <p className="text-gray-600 mb-8 text-lg leading-relaxed">
@@ -161,7 +162,8 @@ const AboutUsSection = () => {
 
               <div className="text-left">
                 <p className="text-sm font-medium text-gray-500">Need Help? Call Us</p>
-                <p className="text-xl font-bold text-[#0683ba]">+1 (555) 123-4567</p>
+                <p className="text-xl font-bold text-[#0683ba]">                  +1 (844) 388-0988
+</p>
               </div>
             </div>
           </div>
