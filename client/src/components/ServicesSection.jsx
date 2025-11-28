@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaToilet, FaBuilding, FaTruck, FaTrashAlt } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import MobileServicesOnly from './MobileServicesOnly';
+import {useNavigate} from "react-router-dom";
 const services = [
   {
     id: 1,
@@ -36,6 +37,26 @@ const services = [
 ];
 
 const ServicesSection = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
+
+  // Detect screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Show mobile services component on mobile, desktop slider on larger screens
+  if (isMobile) {
+    return <MobileServicesOnly />;
+  }
+
   const settings = {
     dots: true,
     infinite: true,
@@ -60,7 +81,19 @@ const ServicesSection = () => {
         }
       },
       {
-        breakpoint: 767,
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false,
+          dots: true,
+          centerMode: false,
+          infinite: true,
+          adaptiveHeight: true
+        }
+      },
+      {
+        breakpoint: 640,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -89,34 +122,34 @@ const ServicesSection = () => {
         </div>
 
         {/* Services Slider */}
-        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4">
+        <div className="w-full max-w-7xl mx-auto overflow-hidden">
           <Slider {...settings}>
             {services.map((service) => (
-              <div key={service.id} className="px-2 sm:px-3 md:px-4">
-                <div className="group bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 sm:hover:-translate-y-2 h-full mx-auto" style={{ maxWidth: '400px' }}>
-                  <div className="p-6 sm:p-7 md:p-8 text-center flex flex-col min-h-[500px]">
+              <div key={service.id} className="px-0 sm:px-3 md:px-4">
+                <div className="group bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 sm:hover:-translate-y-2 h-full mx-auto md:max-w-[400px] sm:max-w-none w-full min-h-[600px] sm:min-h-[500px]">
+                  <div className="p-8 sm:p-7 md:p-8 text-center flex flex-col h-full sm:min-h-[500px]">
                     {/* Icon */}
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-blue-50 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                      <div className="text-3xl sm:text-4xl text-[#0098da] transition-colors duration-300">
+                    <div className="w-20 h-20 sm:w-20 sm:h-20 mx-auto rounded-full bg-blue-50 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                      <div className="text-5xl sm:text-4xl text-[#0098da] transition-colors duration-300">
                         {service.icon}
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mt-5 sm:mt-6 mb-2 sm:mb-3 px-2">
+                    <h3 className="text-2xl sm:text-2xl font-bold text-gray-800 mt-6 mb-4 sm:mb-3 px-2">
                       {service.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm sm:text-base text-gray-600 mb-5 sm:mb-6 flex-grow leading-relaxed px-2">
+                    <p className="text-base sm:text-base text-gray-600 mb-6 sm:mb-6 flex-grow leading-relaxed px-2">
                       {service.text}
                     </p>
 
                     {/* Features List */}
-                    <ul className="space-y-2 text-left mb-6 sm:mb-8">
+                    <ul className="space-y-3 text-left mb-8">
                       {service.features.map((feature, index) => (
-                        <li key={index} className="flex items-start sm:items-center text-sm sm:text-base text-gray-600">
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#0098da] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <li key={index} className="flex items-center text-base text-gray-600">
+                          <svg className="w-5 h-5 text-[#0098da] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                           <span>{feature}</span>
@@ -125,7 +158,7 @@ const ServicesSection = () => {
                     </ul>
 
                     {/* Learn More Button */}
-                    <button className="mt-auto w-full bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium text-sm sm:text-base hover:opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95">
+                    <button className="mt-auto w-full bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white px-6 py-4 sm:px-6 sm:py-3 rounded-lg sm:rounded-lg font-semibold sm:font-medium text-base sm:text-base hover:opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95" onClick={() => navigate('/services')}>
                       Learn More
                     </button>
                   </div>
@@ -137,7 +170,7 @@ const ServicesSection = () => {
 
         {/* View All Services Button */}
         <div className="text-center mt-12 sm:mt-14 md:mt-16">
-          <button className="relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#0098da] font-semibold text-sm sm:text-base rounded-full border-2 border-[#0098da] hover:bg-[#0098da] hover:text-white transition-all duration-300 group overflow-hidden shadow-md hover:shadow-lg">
+          <button className="relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#0098da] font-semibold text-sm sm:text-base rounded-full border-2 border-[#0098da] hover:bg-[#0098da] hover:text-white transition-all duration-300 group overflow-hidden shadow-md hover:shadow-lg" onClick={() => navigate('/services')}>
             <span className="relative z-10">View All Services</span>
             <div className="absolute inset-0 bg-[#0098da] transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
           </button>
@@ -175,15 +208,39 @@ const ServicesSection = () => {
         /* Mobile specific fixes */
         @media (max-width: 767px) {
           .slick-list {
-            margin: 0 -4px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+          }
+
+          .slick-slide > div {
+            padding: 0;
+          }
+
+          .slick-slide {
+            height: auto !important;
+            width: 100% !important;
+            float: left !important;
+          }
+
+          .slick-track {
+            display: flex !important;
+            width: 100% !important;
           }
 
           .slick-dots {
-            bottom: -40px;
+            bottom: -30px;
           }
 
           .slick-dots li button:before {
-            font-size: 8px;
+            font-size: 10px;
+          }
+        }
+
+        /* Extra small mobile devices */
+        @media (max-width: 640px) {
+          .slick-slide {
+            width: 100vw !important;
           }
         }
 
