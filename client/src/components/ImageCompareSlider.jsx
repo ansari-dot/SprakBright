@@ -4,6 +4,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 const ImageCompareSlider = ({ cleanImageSrc, dirtyImageSrc, imageName }) => {
   const [sliderPosition, setSliderPosition] = useState(50); // Initial position in percentage
   const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseMove = useCallback((e) => {
     if (containerRef.current) {
@@ -15,29 +16,57 @@ const ImageCompareSlider = ({ cleanImageSrc, dirtyImageSrc, imageName }) => {
     }
   }, []);
 
+  const handleTouchMove = useCallback((e) => {
+    if (!isDragging || !containerRef.current) return;
+    
+    const touch = e.touches[0];
+    const { left, width } = containerRef.current.getBoundingClientRect();
+    const x = touch.clientX - left;
+    let position = (x / width) * 100;
+    position = Math.max(0, Math.min(100, position)); // Clamp between 0 and 100
+    setSliderPosition(position);
+  }, [isDragging]);
+
   const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
     window.removeEventListener('mousemove', handleMouseMove);
     window.removeEventListener('mouseup', handleMouseUp);
   }, [handleMouseMove]);
 
+  const handleTouchEnd = useCallback(() => {
+    setIsDragging(false);
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('touchend', handleTouchEnd);
+  }, [handleTouchMove]);
+
   const handleMouseDown = useCallback(() => {
+    setIsDragging(true);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   }, [handleMouseMove, handleMouseUp]);
+
+  const handleTouchStart = useCallback((e) => {
+    setIsDragging(true);
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchend', handleTouchEnd);
+  }, [handleTouchMove, handleTouchEnd]);
 
   useEffect(() => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   return (
     <div
       ref={containerRef}
       className="relative w-full h-full overflow-hidden select-none"
       onMouseDown={handleMouseDown}
-      style={{ cursor: 'ew-resize' }}
+      onTouchStart={handleTouchStart}
+      style={{ cursor: isDragging ? 'ew-resize' : 'ew-resize' }}
     >
       {/* Dirty Image (left side) */}
       <img
