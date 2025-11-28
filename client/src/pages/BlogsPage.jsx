@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaArrowRight, FaSpinner, FaSearch } from "react-icons/fa";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import api, { resolveImageUrl } from "../services/api";
 import OptimizedImage from "../components/OptimizedImage";
+import PageTransition from "../components/PageTransition";
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState([]);
@@ -64,7 +66,8 @@ export default function BlogsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 md:pt-28">
+    <PageTransition>
+      <div className="min-h-screen bg-gray-50 pt-24 md:pt-28">
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#0098da] to-[#0683ba] text-white py-16 md:py-20">
@@ -166,5 +169,6 @@ export default function BlogsPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }
